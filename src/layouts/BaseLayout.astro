@@ -4,10 +4,14 @@ import '../styles/global.css';
 interface Props {
 	title: string;
 	description?: string;
+	/* The homepage has no other title, so the brand carries the h1 there. */
+	brandIsHeading?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, brandIsHeading = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname;
+const inNotes = path.startsWith('/notes');
 ---
 
 <!doctype html>
@@ -17,6 +21,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="canonical" href={canonical} />
+		<meta name="theme-color" content="#f2f0ec" />
 		<title>{title}</title>
 		{description && <meta name="description" content={description} />}
 		<meta property="og:title" content={title} />
@@ -27,14 +32,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 	<body>
 		<div class="wrap">
 			<header class="site-header">
-				<a href="/">Jared Korba</a>
-				<nav><a href="/notes">Notes</a></nav>
+				{
+					brandIsHeading ? (
+						<h1 class="brand">Jared Korba</h1>
+					) : (
+						<p class="brand"><a href="/">Jared Korba</a></p>
+					)
+				}
+				<nav>
+					<a href="/notes" aria-current={inNotes ? 'page' : undefined}>Notes</a>
+				</nav>
 			</header>
 			<main>
 				<slot />
 			</main>
 			<footer class="site-footer">
-				<p>&copy; {new Date().getFullYear()} Jared Korba</p>
+				<p>&copy; {new Date().getFullYear()}</p>
 			</footer>
 		</div>
 	</body>

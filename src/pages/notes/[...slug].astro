@@ -24,11 +24,13 @@ const fmt = (date: Date) =>
 
 <BaseLayout title={note.data.title} description={note.data.description}>
 	<article>
-		<h1>{note.data.title}</h1>
-		<p class="meta">
-			<time datetime={note.data.pubDate.toISOString()}>{fmt(note.data.pubDate)}</time>
-			{note.data.updatedDate && <span> &middot; updated {fmt(note.data.updatedDate)}</span>}
-		</p>
+		<header class="note-header">
+			<h1>{note.data.title}</h1>
+			<p class="meta">
+				<time datetime={note.data.pubDate.toISOString()}>{fmt(note.data.pubDate)}</time>
+				{note.data.updatedDate && <> &middot; updated {fmt(note.data.updatedDate)}</>}
+			</p>
+		</header>
 		<Content />
 	</article>
 </BaseLayout>

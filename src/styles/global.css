@@ -1,21 +1,27 @@
+/* ---- Tokens ---------------------------------------------------------- */
+
 :root {
-	--bg: #fdfdfc;
-	--fg: #23211d;
-	--muted: #6b675f;
-	--rule: #e3e0d8;
-	--link: #1b5e5a;
-	--measure: 34rem;
+	color-scheme: light;
+
+	/* Warm paper ground — deliberately off-white, never #fff */
+	--bg: #f2f0ec;
+	--bg-sunk: #e9e6e0;
+	--fg: #1c1b19;
+	--muted: #656158;
+	--rule: #dedad2;
+	--accent: #9c4a2f;
+	--accent-strong: #8a3f27;
+	--accent-wash: #9c4a2f1a;
+
+	--font-sans:
+		ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Inter, Helvetica, Arial, sans-serif;
+	--font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+	--measure: 36rem;
+	--step: 0.25rem;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--bg: #161513;
-		--fg: #e6e3dc;
-		--muted: #9a958b;
-		--rule: #2e2c28;
-		--link: #7fc7bf;
-	}
-}
+/* ---- Reset ----------------------------------------------------------- */
 
 *,
 *::before,
@@ -23,139 +29,317 @@
 	box-sizing: border-box;
 }
 
+html {
+	-webkit-text-size-adjust: 100%;
+	scrollbar-color: var(--rule) var(--bg);
+}
+
 body {
 	margin: 0;
 	background: var(--bg);
 	color: var(--fg);
-	font-family: ui-serif, Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+	font-family: var(--font-sans);
 	font-size: 1.0625rem;
-	line-height: 1.65;
-	-webkit-text-size-adjust: 100%;
+	line-height: 1.7;
+	font-synthesis-weight: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
 }
+
+/* ---- Browser surfaces ------------------------------------------------ */
+
+::selection {
+	background: var(--accent-wash);
+	color: var(--accent-strong);
+}
+
+:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 3px;
+	border-radius: 2px;
+}
+
+input,
+textarea {
+	caret-color: var(--accent);
+}
+
+::-webkit-scrollbar {
+	width: 11px;
+	height: 11px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--rule);
+	border: 3px solid var(--bg);
+	border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #cdc7bb;
+}
+
+/* ---- Layout ---------------------------------------------------------- */
 
 .wrap {
 	max-width: var(--measure);
 	margin: 0 auto;
-	padding: 3rem 1.25rem 4rem;
+	padding: calc(var(--step) * 18) calc(var(--step) * 6) calc(var(--step) * 24);
 }
 
-a {
-	color: var(--link);
-	text-underline-offset: 0.15em;
+@media (max-width: 34rem) {
+	.wrap {
+		padding-top: calc(var(--step) * 10);
+	}
 }
+
+/* ---- Typography ------------------------------------------------------ */
 
 h1,
 h2,
 h3 {
-	line-height: 1.25;
+	line-height: 1.2;
 	font-weight: 600;
-	margin: 2rem 0 0.5rem;
+	letter-spacing: -0.021em;
+	text-wrap: balance;
+	margin: calc(var(--step) * 12) 0 calc(var(--step) * 3);
 }
 
 h1 {
-	font-size: 1.75rem;
+	font-size: clamp(1.875rem, 1.45rem + 1.5vw, 2.375rem);
+	letter-spacing: -0.028em;
 	margin-top: 0;
+}
+
+h2 {
+	font-size: 1.3125rem;
+}
+
+h3 {
+	font-size: 1.0625rem;
+	letter-spacing: -0.012em;
 }
 
 p,
 ul,
 ol,
-blockquote {
-	margin: 0 0 1.1rem;
+blockquote,
+pre {
+	margin: 0 0 calc(var(--step) * 5);
 }
 
-img {
+ul,
+ol {
+	padding-left: 1.25em;
+}
+
+li {
+	margin-bottom: calc(var(--step) * 1);
+}
+
+a {
+	color: var(--accent);
+	text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.22em;
+	transition: text-decoration-color 140ms ease-out, color 140ms ease-out;
+}
+
+a:hover {
+	color: var(--accent-strong);
+	text-decoration-color: currentColor;
+}
+
+strong {
+	font-weight: 620;
+}
+
+img,
+video {
 	max-width: 100%;
 	height: auto;
+	display: block;
+	border-radius: 3px;
 }
 
 pre {
+	background: var(--bg-sunk);
+	border: 1px solid var(--rule);
+	border-radius: 5px;
+	padding: calc(var(--step) * 4) calc(var(--step) * 4.5);
 	overflow-x: auto;
-	padding: 0.9rem 1rem;
-	border-radius: 6px;
-	font-size: 0.875rem;
-	line-height: 1.5;
+	font-size: 0.8438rem;
+	line-height: 1.6;
 }
 
 code {
-	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-	font-size: 0.9em;
+	font-family: var(--font-mono);
+	font-size: 0.875em;
+}
+
+:not(pre) > code {
+	background: var(--bg-sunk);
+	padding: 0.1em 0.34em;
+	border-radius: 3px;
+	overflow-wrap: anywhere;
+}
+
+pre code {
+	background: none;
+	padding: 0;
+}
+
+/* Shiki emits its theme background inline; keep the slab inside the palette
+   while its token colors come from the light theme in astro.config.mjs. */
+pre.astro-code {
+	background: var(--bg-sunk) !important;
 }
 
 blockquote {
 	margin-left: 0;
-	padding-left: 1rem;
-	border-left: 2px solid var(--rule);
+	padding-left: calc(var(--step) * 4);
+	border-left: 1px solid var(--rule);
 	color: var(--muted);
 }
 
 hr {
 	border: 0;
 	border-top: 1px solid var(--rule);
-	margin: 2.5rem 0;
+	margin: calc(var(--step) * 12) 0;
 }
+
+.meta {
+	color: var(--muted);
+	font-size: 0.8125rem;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.012em;
+}
+
+/* ---- Header / footer ------------------------------------------------- */
 
 .site-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	gap: 1rem;
-	margin-bottom: 2.5rem;
+	gap: calc(var(--step) * 5);
+	margin-bottom: calc(var(--step) * 16);
 }
 
-.site-header a {
+.site-header .brand {
+	font-size: 0.9375rem;
+	font-weight: 600;
+	letter-spacing: -0.012em;
 	color: var(--fg);
 	text-decoration: none;
-	font-weight: 600;
+	margin: 0;
+}
+
+.site-header .brand a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.site-header .brand:hover,
+.site-header .brand a:hover {
+	color: var(--accent-strong);
+}
+
+.site-header nav {
+	display: flex;
+	gap: calc(var(--step) * 5);
+	font-size: 0.875rem;
 }
 
 .site-header nav a {
 	color: var(--muted);
-	font-weight: 400;
-	font-size: 0.9375rem;
+	text-decoration: none;
+}
+
+.site-header nav a:hover,
+.site-header nav a[aria-current='page'] {
+	color: var(--accent-strong);
 }
 
 .site-footer {
-	margin-top: 4rem;
-	padding-top: 1.25rem;
+	margin-top: calc(var(--step) * 24);
+	padding-top: calc(var(--step) * 4);
 	border-top: 1px solid var(--rule);
 	color: var(--muted);
-	font-size: 0.875rem;
+	font-size: 0.8125rem;
+	font-variant-numeric: tabular-nums;
 }
+
+.site-footer p {
+	margin: 0;
+}
+
+/* ---- Note list ------------------------------------------------------- */
 
 .note-list {
 	list-style: none;
 	padding: 0;
 	margin: 0;
+	border-top: 1px solid var(--rule);
 }
 
 .note-list li {
-	padding: 1rem 0;
+	margin: 0;
+	padding: calc(var(--step) * 5) 0;
 	border-bottom: 1px solid var(--rule);
 }
 
-.note-list h2 {
-	margin: 0 0 0.15rem;
-	font-size: 1.125rem;
+.note-title {
+	margin: 0;
+	font-size: 1.0625rem;
+	font-weight: 600;
+	line-height: 1.35;
+	letter-spacing: -0.014em;
 }
 
-.note-list a {
-	text-decoration: none;
+.note-title a {
 	color: var(--fg);
+	text-decoration: none;
 }
 
-.note-list a:hover {
-	color: var(--link);
+.note-title a:hover {
+	color: var(--accent-strong);
 }
 
 .note-list p {
-	margin: 0;
+	margin: calc(var(--step) * 1) 0 0;
 	color: var(--muted);
 	font-size: 0.9375rem;
+	line-height: 1.55;
 }
 
-.meta {
+.note-list .meta {
+	margin-top: calc(var(--step) * 2);
+}
+
+/* ---- Article --------------------------------------------------------- */
+
+.note-header {
+	margin-bottom: calc(var(--step) * 9);
+}
+
+.note-header h1 {
+	margin-bottom: calc(var(--step) * 2);
+}
+
+.lede {
 	color: var(--muted);
-	font-size: 0.875rem;
-	font-variant-numeric: tabular-nums;
+	font-size: 1.0625rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+	}
 }
