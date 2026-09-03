@@ -1,0 +1,42 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const projects = await getCollection("projects", ({ data }) => !data.draft);
+    return projects.map((project) => ({
+        params: { slug: project.id },
+        props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const fmt = (date: Date) =>
+    date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+    });
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+    <article>
+        <header class="project-header">
+            <h1>{project.data.title}</h1>
+            <p class="meta">
+                <time datetime={project.data.pubDate.toISOString()}
+                    >{fmt(project.data.pubDate)}</time
+                >
+                {
+                    project.data.updatedDate && (
+                        <> &middot; updated {fmt(project.data.updatedDate)}</>
+                    )
+                }
+            </p>
+        </header>
+        <Content />
+    </article>
+</BaseLayout>

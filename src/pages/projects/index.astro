@@ -1,0 +1,48 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const projects = (
+    await getCollection("projects", ({ data }) => !data.draft)
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const fmt = (date: Date) =>
+    date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        timeZone: "UTC",
+    });
+---
+
+<BaseLayout
+    title="Projects"
+    description="Every project in the garden, newest first."
+>
+    <h1>projects</h1>
+    {
+        projects.length === 0 ? (
+            <p class="meta">Nothing published yet.</p>
+        ) : (
+            <ul class="project-list">
+                {projects.map((project) => (
+                    <li>
+                        <h2 class="project-title">
+                            <a href={`/projects/${project.id}`}>
+                                {project.data.title}
+                            </a>
+                        </h2>
+                        {project.data.description && (
+                            <p>{project.data.description}</p>
+                        )}
+                        <p class="meta">
+                            <time datetime={project.data.pubDate.toISOString()}>
+                                {fmt(project.data.pubDate)}
+                            </time>
+                        </p>
+                    </li>
+                ))}
+            </ul>
+        )
+    }
+</BaseLayout>
