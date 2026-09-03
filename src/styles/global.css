@@ -17,7 +17,7 @@
 		ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Inter, Helvetica, Arial, sans-serif;
 	--font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
-	--measure: 36rem;
+	--measure: 1100px;
 	--step: 0.25rem;
 }
 
@@ -181,7 +181,7 @@ code {
 	font-size: 0.875em;
 }
 
-:not(pre) > code {
+:not(pre)>code {
 	background: var(--bg-sunk);
 	padding: 0.1em 0.34em;
 	border-radius: 3px;
@@ -336,6 +336,7 @@ hr {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	*,
 	*::before,
 	*::after {
